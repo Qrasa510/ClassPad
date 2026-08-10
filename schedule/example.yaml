@@ -1,0 +1,114 @@
+version: 2 # 当前版本为 2
+
+configuration:
+  name: 高三（12）班课表 # 任意 string
+  description: 2026年下学期 # 可选，任意 string
+  cycle:
+    work_count: 11 # 大于 1 的整数，上课的总天数
+    rest_count: 3 # 大于 1 的整数，休息的总天数
+    spans:
+      - activity: work # work 或 rest，下同
+        count: 6 # 1-work_count 的整数，下同
+      - activity: rest 
+        count: 1
+      - activity: work
+        count: 5
+      - activity: rest
+        count: 2
+
+subjects:
+  - name: 数学 # 任意 string
+    simplified_name: 数 # 可选，任意 string，适合中文科目名，ClassIsland 等紧凑课程表软件一般需要
+    teacher: 李梅 # 可选，任意 string
+    location: "101" # 可选，任意 string
+  - name: 语文
+    simplified_name: 语
+    teacher: 王芳
+    location: "102"
+  - name: 英语
+    simplified_name: 英
+    teacher: 张伟
+    location: "103"
+  - name: 物理
+    simplified_name: 物
+    teacher: 赵军
+    location: "104"
+
+schedules:
+  - name: 星期一 # 任意 string
+    enable_day: # 由多个 1-work_count 的整数形成的列表
+      - 1
+      - 7 # 只计算上课的天数，因此这里第二周的周一为第 7 个上课日
+    classes:
+      - subject: 数学 # 任意 string
+        start_time: "07:50:00" # HH:MM:SS 的任意字符串，即 "00:00:00" 到 "23:59:59"
+        end_time: "08:35:00" # 同 start_time
+      - subject: 英语
+        start_time: "08:45:00"
+        end_time: "09:30:00"
+      - subject: 物理
+        start_time: "09:50:00"
+        end_time: "10:35:00"
+      - subject: 语文
+        start_time: "10:45:00"
+        end_time: "11:30:00"
+      - subject: 数学
+        start_time: "13:30:00"
+        end_time: "14:15:00"
+      - subject: 英语
+        start_time: "14:25:00"
+        end_time: "15:10:00"
+      - subject: 物理
+        start_time: "15:20:00"
+        end_time: "16:05:00"
+      - subject: 语文
+        start_time: "16:20:00"
+        end_time: "17:05:00"
+      - subject: 数学
+        start_time: "17:20:00"
+        end_time: "18:05:00"
+      - subject: 英语
+        start_time: "18:15:00"
+        end_time: "19:00:00"
+      - subject: 物理
+        start_time: "19:10:00"
+        end_time: "19:55:00"
+      - subject: 语文
+        start_time: "20:05:00"
+        end_time: "20:50:00"
+      - subject: 数学
+        start_time: "21:00:00"
+        end_time: "21:45:00"
+      - subject: 英语
+        start_time: "21:55:00"
+        end_time: "22:40:00"
+  - name: 星期二-单周
+    enable_day: 
+      - 2
+    classes:
+      - subject: 物理
+        start_time: "08:00:00"
+        end_time: "09:00:00"
+      - subject: 英语
+        start_time: "09:00:00"
+        end_time: "10:00:00"
+  - name: 星期二-双周
+    enable_day: 
+      - 8 # 同理，第二周的周二为第 8 个上课日
+    classes:
+      - subject: 物理
+        start_time: "08:00:00"
+        end_time: "09:00:00"
+      - subject: 英语
+        start_time: "09:00:00"
+        end_time: "10:00:00"
+  - name: 星期六
+    enable_day: 
+      - 6
+    classes:
+      - subject: 物理
+        start_time: "08:00:00"
+        end_time: "09:00:00"
+      - subject: 英语
+        start_time: "09:00:00"
+        end_time: "10:00:00"
