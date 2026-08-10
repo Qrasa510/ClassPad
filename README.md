@@ -81,7 +81,7 @@ tokens:
 push_interval_seconds: 30
 request_timeout_seconds: 15
 devices_file: devices.yaml
-cses_file: schedule\example.yaml
+cses_file: schedule/example.yaml
 ```
 
 - `push_interval_seconds`：服务循环间隔，单位为秒。
@@ -94,7 +94,7 @@ cses_file: schedule\example.yaml
 将课表文件放入 `schedule/`，然后在 `config/config.yaml` 中指定：
 
 ```yaml
-cses_file: schedule\example.yaml
+cses_file: schedule/example.yaml
 ```
 （当然你也可以直接从 [ClassIsland](https://github.com/classisland/classisland) 等软件中导出CSES）
 
@@ -107,6 +107,9 @@ python .\main.py
 ```
 
 服务会持续运行，默认每 30 秒检查一次。只有设备显示数据发生变化时才会向设备推送。
+临时网络错误和服务器错误会进行有限次数的指数退避重试，认证失败等永久错误不会重复请求。
+
+服务启动时会验证运行配置、设备 Token、设备序列号以及 CSES 文件。配置有误时，日志会指出对应字段和位置。
 
 ## 测试
 

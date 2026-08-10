@@ -15,6 +15,29 @@ DAY_NAME_MAP = {
 }
 
 
+class CsesValidationError(ValueError):
+    pass
+
+
+def _validate_document(path: Path) -> None:
+    try:
+        with path.open("r", encoding="utf-8") as file:
+            data = yaml.safe_load(file)
+    except yaml.YAMLError as exc:
+        raise CsesValidationError(f"CSES YAML 格式错误: {path}: {exc}") from exc
+    if not isinstance(data, dict):
+        raise CsesValidationError(f"CSES 文件顶层必须是对象: {path}")
+    missing = [name for name in ("version", "subjects", "schedules") if name not in data]
+    if missing:
+        raise CsesValidationError(
+            f"CSES 文件缺少必要字段: {', '.join(missing)} ({path})"
+        )
+    if not isinstance(data["subjects"], list):
+        raise CsesValidationError(f"CSES subjects 必须是列表: {path}")
+    if not isinstance(data["schedules"], list):
+        raise CsesValidationError(f"CSES schedules 必须是列表: {path}")
+
+
 def _normalize_time(value) -> str:
     parts = str(value or "").strip().split(":")
     if len(parts) < 2:
@@ -73,6 +96,7 @@ def _build_parser(path: Path, cses_module):
 
 
 def _parse_schedule(path: Path) -> dict[str, list[Course]]:
+    _validate_document(path)
     parser = _build_parser(path, _load_cses_module())
     schedule = {day: [] for day in ALL_DAYS}
     subjects = {}
@@ -132,3 +156,7 @@ class CsesScheduleProvider:
             self._schedule = _parse_schedule(self._path)
             self._mtime = mtime
         return self._schedule.get(day, [])
+
+    def validate(self) -> None:
+        """Parse the complete file once so configuration errors fail at startup."""
+        self.courses_for(ALL_DAYS[0])

@@ -41,6 +41,25 @@ class AppTests(unittest.TestCase):
         self.assertEqual(len(canvas.calls), 1)
         self.assertEqual(canvas.calls[0][1]["weather"], "Live weather")
 
+    def test_removed_target_is_pruned_from_dedupe_cache(self):
+        first = PushTarget("token", "first", "Owner")
+        second = PushTarget("token", "second", "Owner")
+        current_targets = [first, second]
+        app = ClassPadApp(
+            FakeCanvas(),
+            FakeWeather(),
+            FakeSchedule(),
+            target_loader=lambda _: current_targets,
+        )
+        config = RuntimeConfig(30, 15, Path("devices"), Path("schedule"))
+
+        app.run_once(config)
+        current_targets.remove(first)
+        app.run_once(config)
+
+        self.assertNotIn(first.key, app._last_data_by_target)
+        self.assertIn(second.key, app._last_data_by_target)
+
 
 if __name__ == "__main__":
     unittest.main()
