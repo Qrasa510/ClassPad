@@ -25,5 +25,4 @@ def create_retry_session(retries: int = 3, backoff_factor: float = 1.0) -> reque
     adapter = HTTPAdapter(max_retries=retry_policy)
     session = requests.Session()
     session.mount("https://", adapter)
-    session.mount("http://", adapter)
     return session

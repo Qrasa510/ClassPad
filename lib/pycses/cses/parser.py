@@ -149,5 +149,5 @@ class CSESParser:
             with open(file_path, 'r', encoding='utf-8') as f:
                 data = yaml.safe_load(f)
                 return 'version' in data and 'subjects' in data and 'schedules' in data
-        except Exception:
+        except (OSError, yaml.YAMLError, TypeError):
             return False

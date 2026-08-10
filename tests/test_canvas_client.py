@@ -6,20 +6,16 @@ from src.canvas_client import CanvasAuthError, CanvasClient, CanvasError
 from src.models import PushTarget
 
 
-class FakeResponse:
-    def __init__(self, status_code=200):
-        self.status_code = status_code
-
-    def raise_for_status(self):
-        if self.status_code >= 400:
-            error = requests.HTTPError(f"HTTP {self.status_code}")
-            error.response = self
-            raise error
+def make_response(status_code=200):
+    response = requests.Response()
+    response.status_code = status_code
+    response.url = "https://example.test/canvas"
+    return response
 
 
 class FakeSession:
     def __init__(self, response=None, error=None):
-        self.response = response or FakeResponse()
+        self.response = response if response is not None else make_response()
         self.error = error
         self.calls = []
 
@@ -49,7 +45,7 @@ class CanvasClientTests(unittest.TestCase):
 
     def test_authentication_error_is_not_generic(self):
         with self.assertRaises(CanvasAuthError):
-            CanvasClient(FakeSession(FakeResponse(401))).push(
+            CanvasClient(FakeSession(make_response(401))).push(
                 self.target, self.data, 15
             )
 

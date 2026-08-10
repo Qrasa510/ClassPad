@@ -3,16 +3,28 @@ import unittest
 from pathlib import Path
 
 from src.config_store import load_runtime_config
-from src.cses_schedule import CsesScheduleProvider
+from src.cses_schedule import CsesScheduleProvider, CsesValidationError
 from src.schedule_service import ScheduleService
+
+from lib.pycses.cses.generator import CSESGenerator
+from lib.pycses.cses.parser import CSESParser
 
 
 class CsesScheduleTests(unittest.TestCase):
+    def test_generator_time_normalizer_is_static(self):
+        self.assertEqual(CSESGenerator._normalize_time("8:05"), "08:05:00")
+
+    def test_parser_file_check_handles_invalid_yaml_types(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "invalid.yaml"
+            path.write_text("123\n", encoding="utf-8")
+            self.assertFalse(CSESParser.is_cses_file(str(path)))
+
     def test_invalid_cses_is_rejected_during_validation(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "invalid.yaml"
             path.write_text("not: a valid cses file\n", encoding="utf-8")
-            with self.assertRaises((ValueError, KeyError)):
+            with self.assertRaises(CsesValidationError):
                 CsesScheduleProvider(path).validate()
 
     def test_project_configuration_builds_canvas_data(self):

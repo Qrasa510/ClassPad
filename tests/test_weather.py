@@ -7,7 +7,7 @@ class FakeWeatherClient:
     def __init__(self):
         self.calls = 0
 
-    def fetch(self, location, timeout_seconds):
+    def fetch(self, _location, _timeout_seconds):
         self.calls += 1
         return "Sunny"
 

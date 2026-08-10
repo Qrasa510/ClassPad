@@ -6,7 +6,8 @@ from src.schedule_service import ScheduleService
 
 
 class FakeProvider:
-    def courses_for(self, day):
+    @staticmethod
+    def courses_for(_day):
         return [
             Course("08:00", "08:45", "Math", "M", "Alice"),
             Course("09:00", "09:45", "English", "E", "Bob"),

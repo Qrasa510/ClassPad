@@ -12,7 +12,7 @@ def _progress(start: datetime, end: datetime, now: datetime) -> int:
     total = (end - start).total_seconds()
     if total <= 0:
         return 0
-    return int(max(0, min(100, (now - start).total_seconds() * 100 / total)))
+    return int(max(0.0, min(100.0, (now - start).total_seconds() * 100 / total)))
 
 
 def _occurrences(now: datetime, courses: list[Course]):

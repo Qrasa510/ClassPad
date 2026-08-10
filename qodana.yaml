@@ -32,8 +32,8 @@ profile:
 
 # Quality gate. Will fail the CI/CD pipeline if any condition is not met
 # severityThresholds - configures maximum thresholds for different problem severities
-# testCoverageThresholds - configures minimum code coverage on a whole project and newly added code
-# Code Coverage is available in Ultimate and Ultimate Plus plans
+# testCoverageThresholds - sets minimum percentages for the full project and new code
+# This feature is available in paid Qodana plans
 #failureConditions:
 #  severityThresholds:
 #    any: 15

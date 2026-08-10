@@ -45,10 +45,8 @@ def main():
             app.run_once(config)
         except ConfigError as exc:
             logger.error("配置错误: %s", exc)
-        except (OSError, ValueError) as exc:
+        except (OSError, ValueError, RuntimeError) as exc:
             logger.error("课表加载失败: %s", exc)
-        except Exception:
-            logger.exception("运行循环发生未预期错误")
 
         time.sleep(sleep_seconds)
 

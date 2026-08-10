@@ -14,12 +14,14 @@ class FakeCanvas:
 
 
 class FakeWeather:
-    def get(self, location, timeout):
+    @staticmethod
+    def get(_location, _timeout):
         return "Live weather"
 
 
 class FakeSchedule:
-    def build_canvas_data(self, owner, weather):
+    @staticmethod
+    def build_canvas_data(owner, weather):
         return {"owner": owner, "weather": weather}
 
 

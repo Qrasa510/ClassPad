@@ -43,7 +43,8 @@ class CSESGenerator:
         }
         self.subjects.append(subject)
     
-    def _normalize_time(self, time_str: Union[str, int]) -> QuotedTime:
+    @staticmethod
+    def _normalize_time(time_str: Union[str, int]) -> QuotedTime:
         """
         规范化时间格式为 HH:MM:SS，并确保输出时带有引号
         
@@ -60,7 +61,6 @@ class CSESGenerator:
             time_str = str(time_str)
             
         parts = time_str.split(':')
-        normalized = ""
         
         if len(parts) == 2:
             # HH:MM -> HH:MM:SS
