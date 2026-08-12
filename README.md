@@ -3,9 +3,9 @@
 </p>
 <h1 align="center">ClassPad</h1>
 
-ClassPad 是一个用于 MindReset Quote/0「摘录」设备的电子课表显示服务端。
+ClassPad 是一个用于 MindReset Quote/0「摘录」墨水信息显示设备的电子课表服务端。
 
-它会读取 CSES（通用课表交换格式）课表，根据当前时间生成正在上的课程、下一节课程、课间状态、课程进度和今日剩余课程，并通过 Dot Canvas API 推送到一个或多个 Quote/0 设备。
+它会读取你提供的 CSES 课表，根据当前时间将正在上的课程、下一节课程、课间状态、课程进度和今日剩余课程推送到一个或多个 Quote/0 设备。
 
 ## 功能
 
@@ -42,7 +42,7 @@ ClassPad/
 
 建议使用 Python 3.10 或更高版本：
 
-```powershell
+```bash
 python -m pip install -r requirements.txt
 ```
 
@@ -54,24 +54,24 @@ python -m pip install -r requirements.txt
 tokens:
   - name: account-a
     token: dot_app_xxx
-    owner: Qrasa
+    owner: UserA
     devices:
-      - sn: 7CE8B17A3D10
+      - sn: ABCD1234EF56
         location: Songjiang
       - sn: ABCD1234EF56
   - name: account-b
     token: dot_app_yyy
     owner: TeamB
     devices:
-      - sn: 112233445566
+      - sn: ABCD1234EF56
         owner: Alice
 ```
 
 说明：
 
 - 一个 Token 可以配置多个设备。
-- `owner` 可以在账号级别设置，也可以在单个设备上覆盖。
-- `location` 使用英文城市名，用于自动获取实时天气；不配置时由 Canvas 模板显示默认示例天气。
+- `owner` 可以在账号级别设置，也可以在单个设备上覆盖，用于在屏幕右下角展示组织或所有者。
+- `location` 使用英文城市名，用于自动获取实时天气；不配置时显示为[滚木](https://mzh.moegirl.org.cn/滚木)。
 
 ## 配置服务
 
@@ -96,13 +96,13 @@ cses_file: schedule/example.yaml
 ```yaml
 cses_file: schedule/example.yaml
 ```
-（当然你也可以直接从 [ClassIsland](https://github.com/classisland/classisland) 等软件中导出CSES）
+（当然你也可以直接从 [ClassIsland](https://github.com/classisland/classisland) 等软件中导出CSES格式的课表）
 
-服务端会自动读取 CSES 文件，并在文件修改后重新加载。课表中的科目、教师、星期、开始时间和结束时间会用于生成 Quote/0 的显示内容。
+服务端会自动读取 CSES 文件，并在文件修改后热重载。课表中的科目、教师、星期、开始时间和结束时间会用于生成 Quote/0 的显示内容。
 
 ## 运行
 
-```powershell
+```bash
 python .\main.py
 ```
 
@@ -113,7 +113,7 @@ python .\main.py
 
 ## 测试
 
-```powershell
+```bash
 python -m unittest discover -s tests -v
 ```
 
@@ -121,4 +121,4 @@ python -m unittest discover -s tests -v
 
 本项目使用 GNU General Public License v3.0，详见根目录的 [LICENSE](LICENSE)。
 
-`licenses/` 目录包含内置 CSES 解析器及 Python 第三方依赖的许可证文本。
+`licenses/` 目录包含第三方依赖的许可证文本。
