@@ -27,6 +27,35 @@ class CsesScheduleTests(unittest.TestCase):
             with self.assertRaises(CsesValidationError):
                 CsesScheduleProvider(path).validate()
 
+    def test_unquoted_yaml_times_after_nine_are_not_dropped(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "standard.yaml"
+            path.write_text(
+                """version: 1
+subjects:
+  - name: 生物
+  - name: 数学
+schedules:
+  - name: Wednesday
+    enable_day: 3
+    weeks: all
+    classes:
+      - subject: 生物
+        start_time: 09:10:00
+        end_time: 09:50:00
+      - subject: 数学
+        start_time: 10:00:00
+        end_time: 10:40:00
+""",
+                encoding="utf-8",
+            )
+
+            courses = CsesScheduleProvider(path).courses_for("WED")
+
+            self.assertEqual([course.name for course in courses], ["生物", "数学"])
+            self.assertEqual(courses[1].start, "10:00")
+            self.assertEqual(courses[1].end, "10:40")
+
     def test_project_configuration_builds_canvas_data(self):
         config = load_runtime_config()
         provider = CsesScheduleProvider(config.cses_file)

@@ -39,10 +39,24 @@ def _validate_document(path: Path) -> None:
 
 
 def _normalize_time(value) -> str:
+    # PyYAML follows YAML 1.1 and may parse an unquoted value such as
+    # 10:00:00 as the sexagesimal integer 36000 (seconds since midnight).
+    if isinstance(value, int) and not isinstance(value, bool):
+        if not 0 <= value < 24 * 60 * 60:
+            return ""
+        hour, remainder = divmod(value, 60 * 60)
+        minute, _second = divmod(remainder, 60)
+        return f"{hour:02d}:{minute:02d}"
+
     parts = str(value or "").strip().split(":")
-    if len(parts) < 2:
+    if len(parts) not in {2, 3} or not all(part.isdigit() for part in parts):
         return ""
-    return f"{parts[0].zfill(2)}:{parts[1].zfill(2)}"
+
+    hour, minute = int(parts[0]), int(parts[1])
+    second = int(parts[2]) if len(parts) == 3 else 0
+    if not 0 <= hour < 24 or not 0 <= minute < 60 or not 0 <= second < 60:
+        return ""
+    return f"{hour:02d}:{minute:02d}"
 
 
 def _day_key(value) -> str | None:
