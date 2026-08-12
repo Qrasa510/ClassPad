@@ -55,7 +55,7 @@ class CanvasClient:
             raise CanvasError(f"设备 {target.device_id} 网络请求失败: {exc}") from exc
 
         logger.info(
-            "推送成功 device=%s course=%s course_time=%s remaining=%s progress=%s%%",
+            "已经送达 · %s · %s · %s · 剩余 %s 分钟 · %s%%",
             target.device_id,
             data.get("course", ""),
             data.get("courseTime", ""),

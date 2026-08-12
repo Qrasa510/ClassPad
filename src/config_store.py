@@ -59,7 +59,7 @@ def _ensure_yaml_file(path: Path, default_data: dict) -> None:
     yaml_module: Any = yaml
     with path.open("w", encoding="utf-8") as file:
         yaml_module.safe_dump(default_data, file, allow_unicode=True, sort_keys=False)
-    logger.warning("已自动生成配置文件，请填写后重新运行: %s", path)
+    logger.warning("为你准备好了配置文件 · %s · 填写后重新启动即可", path)
 
 
 def _load_yaml_mapping(path: Path, default_data: dict) -> dict:

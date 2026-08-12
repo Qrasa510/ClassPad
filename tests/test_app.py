@@ -62,6 +62,21 @@ class AppTests(unittest.TestCase):
         self.assertNotIn(first.key, app._last_data_by_target)
         self.assertIn(second.key, app._last_data_by_target)
 
+    def test_cancelled_cycle_does_not_push(self):
+        target = PushTarget("token", "device", "Owner", "Hong Kong")
+        canvas = FakeCanvas()
+        app = ClassPadApp(
+            canvas,
+            FakeWeather(),
+            FakeSchedule(),
+            target_loader=lambda _: [target],
+        )
+        config = RuntimeConfig(30, 15, Path("devices"), Path("schedule"))
+
+        app.run_once(config, should_continue=lambda: False)
+
+        self.assertEqual([], canvas.calls)
+
 
 if __name__ == "__main__":
     unittest.main()
